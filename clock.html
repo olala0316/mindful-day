@@ -1,0 +1,34 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;overflow:hidden;background:#06102a}
+body{font-family:Georgia,'Times New Roman',serif;color:#D6EAF7}
+.w{position:relative;height:100%;min-height:200px;background:radial-gradient(120% 90% at 70% 30%,#13284f 0%,#081536 45%,#040A1A 100%);display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:6%}
+canvas{position:absolute;inset:0;width:100%;height:100%}
+.z{position:relative;z-index:1}
+.w{gap:7%}
+.g{font-style:italic;font-size:clamp(13px,4.2vmin,22px);color:#7FA1C4}
+.c{font-size:clamp(40px,19vmin,104px);line-height:1;margin:.1em 0 .12em}
+.c span{color:#7FA1C4;font-size:.42em;margin-left:.12em}
+.d{font-size:clamp(11px,3.4vmin,17px);letter-spacing:.2em;color:#B7CEE6}
+.b{margin-top:1.1em;display:grid;grid-template-columns:auto 1fr auto;gap:.45em .7em;align-items:center;font-size:clamp(10px,2.8vmin,13px);color:#7FA1C4;letter-spacing:.12em;min-width:200px}
+.b i{display:block;height:2px;background:#1E3563;border-radius:2px;overflow:hidden}.b i b{display:block;height:100%;background:linear-gradient(90deg,#4B6FA5,#D6EAF7)}
+.m{text-align:center}.m svg{width:clamp(70px,32vmin,170px);filter:drop-shadow(0 0 26px rgba(183,206,230,.35))}
+.p{font-style:italic;font-size:clamp(11px,3.2vmin,15px);color:#7FA1C4;margin-top:.5em}
+@media (max-aspect-ratio:1/1){.w{flex-direction:column-reverse}.t{text-align:center}}
+</style></head><body><div class="w"><canvas></canvas>
+<div class="t z"><div class="g" id="g"></div><div class="c" id="c"></div><div class="d" id="d"></div>
+<div class="b"><span>день</span><i><b id="b1"></b></i><span id="v1"></span><span>месяц</span><i><b id="b2"></b></i><span id="v2"></span><span>год</span><i><b id="b3"></b></i><span id="v3"></span></div></div>
+<div class="m z"><svg viewBox="-50 -50 100 100"><defs><radialGradient id="mg" cx=".42" cy=".4" r=".65"><stop offset="0" stop-color="#F2F7FD"/><stop offset=".75" stop-color="#C9D3E2"/><stop offset="1" stop-color="#8E9BB2"/></radialGradient><filter id="tx"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .45 0 0 0 0 .5 0 0 0 0 .6 0 0 0 -2.2 1.25"/><feComposite in2="SourceGraphic" operator="in"/></filter><clipPath id="lit"><path id="lp"/></clipPath></defs><circle r="46" fill="#1B2B4E" opacity=".7"/><g clip-path="url(#lit)"><circle r="46" fill="url(#mg)"/><circle r="46" fill="#fff" filter="url(#tx)"/></g></svg><div class="p" id="p"></div></div></div>
+<script>
+const D=["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"],M=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"],PH=["новолуние","растущий серп","первая четверть","растущая луна","полнолуние","убывающая луна","последняя четверть","убывающий серп"];
+const $=i=>document.getElementById(i);
+function moon(){const sy=29.530588853;let a=((Date.now()-Date.UTC(2000,0,6,18,14))/864e5)%sy;const f=a/sy,R=46,k=Math.cos(2*Math.PI*f),rx=Math.abs(k)*R;
+$('lp').setAttribute('d',f<.5?`M0,-${R}A${R},${R} 0 0 1 0,${R}A${rx},${R} 0 0 ${k>0?0:1} 0,-${R}Z`:`M0,-${R}A${R},${R} 0 0 0 0,${R}A${rx},${R} 0 0 ${k>0?1:0} 0,-${R}Z`);
+$('p').textContent=PH[Math.floor(f*8+.5)%8]+" · "+Math.round((1-k)/2*100)+"%"}
+function bar(n,p){$('b'+n).style.width=(p*100).toFixed(1)+"%";$('v'+n).textContent=Math.floor(p*100)+"%"}
+function tick(){const n=new Date(),h=n.getHours(),y=n.getFullYear();$('g').textContent=(h<5?"Доброй ночи":h<12?"Доброе утро":h<18?"Добрый день":"Добрый вечер")+", Оля";
+$('c').innerHTML=String(h).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0")+"<span>"+String(n.getSeconds()).padStart(2,"0")+"</span>";
+$('d').textContent=D[n.getDay()]+" · "+n.getDate()+" "+M[n.getMonth()];
+bar(1,(h*3600+n.getMinutes()*60+n.getSeconds())/86400);bar(2,(n.getDate()-1+h/24)/new Date(y,n.getMonth()+1,0).getDate());bar(3,(n-new Date(y,0,1))/(new Date(y+1,0,1)-new Date(y,0,1)))}
+let S=[],C,X;function st(){C=document.querySelector('canvas');const r=devicePixelRatio||1;C.width=C.clientWidth*r;C.height=C.clientHeight*r;X=C.getContext('2d');S=[];const N=C.clientWidth*C.clientHeight/1500|0;for(let i=0;i<N;i++)S.push([Math.random()*C.width,Math.random()*C.height,(Math.random()**3*1.6+.4)*r,Math.random()*6.3,.3+Math.random()*.7])}
+function lp(t){X.clearRect(0,0,C.width,C.height);X.fillStyle="#E6F0FF";for(const s of S){X.globalAlpha=s[4]*(.55+.45*Math.sin(t/900+s[3]));X.beginPath();X.arc(s[0],s[1],s[2],0,6.3);X.fill()}requestAnimationFrame(lp)}
+st();requestAnimationFrame(lp);addEventListener('resize',st);tick();moon();setInterval(tick,1000);setInterval(moon,6e5);
+</script></body></html>
