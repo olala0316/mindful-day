@@ -1,0 +1,19 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;overflow:hidden;background:#06102a}
+body{font-family:Georgia,'Times New Roman',serif;color:#D6EAF7}
+.w{position:relative;height:100%;min-height:200px;background:radial-gradient(120% 90% at 70% 30%,#13284f 0%,#081536 45%,#040A1A 100%);display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:6%}
+canvas{position:absolute;inset:0;width:100%;height:100%}
+.z{position:relative;z-index:1}
+.q{text-align:center;max-width:34em}
+.s{color:#7FA1C4;letter-spacing:.6em;font-size:clamp(10px,3vmin,14px);margin-bottom:1.2em}
+.t{font-style:italic;font-size:clamp(16px,6.2vmin,34px);line-height:1.35;transition:opacity 1.2s ease,filter 1.2s ease}
+.h{opacity:0;filter:blur(4px)}
+.n{margin-top:1.4em;display:flex;gap:.5em;justify-content:center}.n span{width:5px;height:5px;border-radius:50%;background:#2B4778;transition:background .6s}.n .a{background:#D6EAF7}
+.w{cursor:pointer}
+</style></head><body><div class="w" onclick="nx()"><canvas></canvas><div class="q z"><div class="s">✦ ✦ ✦</div><div class="t" id="t"></div><div class="n" id="n"></div></div></div>
+<script>const Q=["Ты не обязана успеть всё сегодня. Достаточно сделать следующий маленький шаг.","Луна тоже бывает неполной и всё равно светит.","Медленно тоже значит вперёд.","Ты уже прошла через столько всего. Пройдёшь и через это.","Отдых тоже часть пути.","Будь к себе так же добра, как к лучшей подруге.","Каждый вечер можно начать заново.","Ты растёшь даже тогда, когда этого не видно.","Не сравнивай свою главу с чужим финалом.","Тишина помогает услышать себя.","Мечтай смело. Действуй мягко. Верь в себя.","Твой темп правильный.","Сегодня достаточно быть собой.","Звёзды не видны без темноты. И это тоже пройдёт."];let i=Math.floor(Math.random()*Q.length),T;
+const t=document.getElementById('t'),n=document.getElementById('n');for(let k=0;k<Math.min(Q.length,7);k++)n.appendChild(document.createElement('span'));
+function sh(){t.textContent=Q[i];[...n.children].forEach((e,k)=>e.className=k==i%n.children.length?'a':'')}
+function nx(){clearTimeout(T);t.classList.add('h');setTimeout(()=>{i=(i+1)%Q.length;sh();t.classList.remove('h')},1200);T=setTimeout(nx,11000)}
+sh();T=setTimeout(nx,11000);let S=[],C,X;function st(){C=document.querySelector('canvas');const r=devicePixelRatio||1;C.width=C.clientWidth*r;C.height=C.clientHeight*r;X=C.getContext('2d');S=[];const N=C.clientWidth*C.clientHeight/1500|0;for(let i=0;i<N;i++)S.push([Math.random()*C.width,Math.random()*C.height,(Math.random()**3*1.6+.4)*r,Math.random()*6.3,.3+Math.random()*.7])}
+function lp(t){X.clearRect(0,0,C.width,C.height);X.fillStyle="#E6F0FF";for(const s of S){X.globalAlpha=s[4]*(.55+.45*Math.sin(t/900+s[3]));X.beginPath();X.arc(s[0],s[1],s[2],0,6.3);X.fill()}requestAnimationFrame(lp)}
+st();requestAnimationFrame(lp);addEventListener('resize',st);</script></body></html>
